@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title is-1">
+  Задача {{ num }}, "{{ lessons.name }}"
+</h1>
+
+<br>
+<br>
+
+ <div class="box">
+     <div class="content is-medium">
+         <br>
+         <h4>Условия</h4>
+         {% for text in lessons.description %}
+            <p>{{ text }}</p><br>
+         {% endfor %}
+     </div>
+</div>
+ <div class="box">
+  <div class="content is-medium">
+    <h4>Тестовые данные:</h4>
+  </div>
+     <table class="table is-bordered is-fullwidth">
+         <thead>
+            <tr>
+              <th><abbr>Номер теста</abbr></th>
+              <th><abbr>Входные данные</abbr></th>
+              <th><abbr>Выходные данные</abbr></th>
+            </tr>
+          </thead>
+         <tbody>
+             {% for dat in lessons.data %}
+                <tr>
+                  <th>{{ dat.num }}</th>
+                  <td>{{ dat.data_in }}</td>
+                  <td>{{ dat.data_out }}</td>
+                </tr>
+             {% endfor %}
+         </tbody>
+    </table>
+ <div class="field">
+  <div class="control">
+      <form action="{{ url_for('main.submit') }}" method="post">
+
+        <textarea name="form-text" id="text" class="textarea is-medium" placeholder="Вставь своё решение"></textarea>
+          <br>
+          <button class="button is-normal-left is-light"><a href="{{ url_for('main.task') }}">Вернуться</a></button>
+          <button class="button is-normal is-success is-light" type="submit">Отправить решение</button>
+      </form>
+
+  </div>
+</div>
+</div>
+
+
+
+
+{% endblock %}
