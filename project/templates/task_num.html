@@ -2,8 +2,11 @@
 
 {% block content %}
 <h1 class="title is-1">
-  Задача {{ num }}, "{{ lessons.name }}"
+  Задача {{ num }}, "{{ tasks.name }}"
 </h1>
+<h3 class="title is-3">
+  {{ answer }}
+</h3>
 
 <br>
 <br>
@@ -12,7 +15,7 @@
      <div class="content is-medium">
          <br>
          <h4>Условия</h4>
-         {% for text in lessons.description %}
+         {% for text in tasks.description %}
             <p>{{ text }}</p><br>
          {% endfor %}
      </div>
@@ -30,7 +33,7 @@
             </tr>
           </thead>
          <tbody>
-             {% for dat in lessons.data %}
+             {% for dat in tasks.data %}
                 <tr>
                   <th>{{ dat.num }}</th>
                   <td>{{ dat.data_in }}</td>
@@ -41,11 +44,10 @@
     </table>
  <div class="field">
   <div class="control">
-      <form action="{{ url_for('main.submit') }}" method="post">
-
-        <textarea name="form-text" id="text" class="textarea is-medium" placeholder="Вставь своё решение"></textarea>
+      <form action="/submit/{{ lesson }}_{{ num - 1 }}" method="post" enc>
+        <textarea name="form-text" id="text" class="textarea is-medium" placeholder="Вставь своё решение" required>{{ text }}</textarea>
           <br>
-          <button class="button is-normal-left is-light"><a href="{{ url_for('main.task') }}">Вернуться</a></button>
+          <button class="button is-normal-left is-light"><a href="/lessons/{{ lesson }}">Вернуться</a></button>
           <button class="button is-normal is-success is-light" type="submit">Отправить решение</button>
       </form>
 

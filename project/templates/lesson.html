@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="columns">
+            <div class="column is-12">
+                <section class="hero is-info welcome is-small">
+                    <div class="hero-body">
+                        <div class="container">
+                            <h1 class="title">
+                                {{ name }}, список уроков у тебя перед глазами
+                            </h1>
+                            <h2 class="subtitle">
+                                Выбирай какой тебе по душе)
+                            </h2>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="columns">
+                    <div class="column is-12">
+                        <div class="card events-card">
+{#                                    <p>{{lesson.author.nickname}} says: <b>{{post.body}}</b></p>#}
+                            <div class="card-table">
+
+                                <div class="content">
+                                    <table class="table is-fullwidth is-striped">
+
+                                        <tbody>
+
+                                            {% for num in range(4) %}
+
+                                                <tr>
+                                                    <td> <a href="/lesson/{{ num + 1 }}"> Занятие - {{ num + 1 }}</a></td>
+                                                </tr>
+
+                                            {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script async type="text/javascript" src="../js/bulma.js"></script>
+{% endblock %}

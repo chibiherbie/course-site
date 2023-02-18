@@ -26,7 +26,7 @@
                                 Главная
                             </a>
                             {% if current_user.is_authenticated %}
-                            <a href="{{ url_for('main.task') }}" class="navbar-item">
+                            <a href="{{ url_for('main.lessons') }}" class="navbar-item">
                                 Задачи
                             </a>
                             <a href="{{ url_for('main.profile') }}" class="navbar-item">
@@ -35,7 +35,7 @@
                             {% endif %}
                             {% if not current_user.is_authenticated %}
                             <a href="{{ url_for('auth.login') }}" class="navbar-item">
-                                Логин
+                                Войти
                             </a>
                             <a href="{{ url_for('auth.signup') }}" class="navbar-item">
                                 Регестрация

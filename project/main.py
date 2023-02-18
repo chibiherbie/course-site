@@ -1,9 +1,12 @@
 from flask import request
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect
 from flask_login import login_required, current_user
-import json
+from .utils import get_task_file
 from . import db
+from .models import Tasks
+
+from .check_task import check
 
 main = Blueprint('main', __name__)
 
@@ -16,38 +19,87 @@ def index():
 @main.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', name=current_user.name)
+    tasks = Tasks.query.filter_by(user_id=current_user.id, completed=True).all()
+
+    return render_template('profile.html', name=current_user.name, tasks=len(tasks))
 
 
-@main.route('/task')
+@main.route('/lessons')
 @login_required
-def task():
-
-    with open('project/tasks/tasks.json', encoding='utf-8') as f:
-        file = json.load(f)
-
-    for index, i in enumerate(file['lessons']['1']):
-        print(i)
-    return render_template('task.html', name=current_user.name, lessons=file['lessons']['1'],
-                           count=len(file['lessons']['1']))
+def lessons():
+    return render_template('lesson.html', name=current_user.name)
 
 
-@main.route('/task/<int:num>', methods=['GET'])
+@main.route('/lesson/<int:num_lesson>')
 @login_required
-def task_num(num):
-    with open('project/tasks/tasks.json', encoding='utf-8') as f:
-        file = json.load(f)
+def lesson(num_lesson):
 
-    return render_template('task_num.html', lessons=file['lessons']['1'][num],
-                           num=(num + 1))
+    file = get_task_file(num_lesson)
 
-
-@main.route('/submit', methods=['POST'])
-def submit():
-    print(request.form.get("form-text"))
-    return 'You entered: {}'.format(request.form.get("form-text"))
+    return render_template('task.html', name=current_user.name, lessons=file['tasks'],
+                           count=len(file['tasks']), lesson=num_lesson)
 
 
+@main.route('/task/<int:lesson>_<int:task>', methods=['GET'])
+@login_required
+def task_num(lesson, task):
+    file = get_task_file(lesson)
+
+    task_user = Tasks.query.filter_by(user_id=current_user.id, lesson=lesson, task=task).first()
+    text = task_user.text if task_user else ''
+
+    return render_template('task_num.html', tasks=file['tasks'][task],
+                           num=(task + 1), text=text, lesson=lesson, charset='utf8')
+
+
+@main.route('/submit/<int:num_lesson>_<int:num_task>', methods=['POST'])
+@login_required
+def submit(num_lesson, num_task):
+    """Добовляем решение задачи"""
+
+    task = Tasks.query.filter_by(user_id=current_user.id, lesson=num_lesson, task=num_task).first()
+
+    if task:
+        # решение уже было
+        task.text = request.form.get("form-text")
+        db.session.commit()
+
+    else:
+        # Новое решение
+        task = Tasks(user_id=current_user.id, lesson=num_lesson, task=num_task, completed=False,
+                     text=request.form.get("form-text"))
+        db.session.add(task)
+        db.session.commit()
+
+    file = get_task_file(num_lesson)
+
+    # check(task)
+
+    return render_template('task_num.html', tasks=file['tasks'][num_task],
+                           num=(num_task + 1), text=request.form.get("form-text"), lesson=num_lesson,
+                           answer='Решение отправлено')
+
+
+@main.route('/api/change_task', methods=['POST'])
+@login_required
+def api_task():
+    """Меняем статус задачи"""
+
+    task = Tasks.query.filter_by(user_id=current_user.id, lesson=num_lesson, task=num_task).first()
+
+    if task:
+        # решение уже было
+        task.text = request.form.get("form-text")
+        db.session.commit()
+
+    else:
+        # Новое решение
+        task = Tasks(user_id=current_user.id, lesson=num_lesson, task=num_task, completed=False,
+                     text=request.form.get("form-text"))
+        db.session.add(task)
+        db.session.commit()
+
+    return ""
 
 
 
