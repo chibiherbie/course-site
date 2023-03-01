@@ -12,6 +12,8 @@
 <br>
 
  <div class="box">
+
+
      <div class="content is-medium">
          <br>
          <h4>Условия</h4>
@@ -44,18 +46,16 @@
     </table>
  <div class="field">
   <div class="control">
-      <form action="/submit/{{ lesson }}_{{ num - 1 }}" method="post" enc>
-        <textarea name="form-text" id="text" class="textarea is-medium" placeholder="Вставь своё решение" required>{{ text }}</textarea>
-          <br>
-          <button class="button is-normal-left is-light"><a href="/lessons/{{ lesson }}">Вернуться</a></button>
-          <button class="button is-normal is-success is-light" type="submit">Отправить решение</button>
-      </form>
 
+      <form action="{{ url_for('main.submit', num_lesson=lesson, num_task=num-1) }}" method="post">
+        <textarea name="form-text" id="text" class="textarea is-medium" placeholder="Вставь своё решение" required>{{ text }}</textarea><br>
+        <button class="button is-medium is-success is-light ml-10" type="submit">Отправить решение</button>
+      </form>
   </div>
 </div>
 </div>
 
-
-
+ <button class="button is-normal is-light is-pulled-left"><a href="{{ url_for('main.lesson', num_lesson=lesson) }}">Вернуться назад</a></button>
+{# <button class="button is-normal is-light is-pulled-right"><a href="{{ url_for('main.lesson', num_lesson=lesson) }}">Ошибка в задание</a></button>#}
 
 {% endblock %}

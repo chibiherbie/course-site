@@ -17,10 +17,20 @@
     <section class="hero is-link is-fullheight">
 
         <div class="hero-head">
-            <nav class="navbar">
+            <nav class="navbar ">
+              <p class="navbar-item">
+
+              </p>
                 <div class="container">
 
                     <div id="navbarMenuHeroA" class="navbar-menu">
+                        <div class="navbar-start">
+                            <a href="{{ url_for('main.index') }}" >
+                                <img src="/static/sh_logo.png"
+                                      alt="SibHub logo"
+                                      width="80" height="80">
+                            </a>
+                        </div>
                         <div class="navbar-end">
                             <a href="{{ url_for('main.index') }}" class="navbar-item">
                                 Главная

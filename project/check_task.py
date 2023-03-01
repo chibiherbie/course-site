@@ -4,6 +4,8 @@ from .utils import get_task_file
 # import test
 import pywinauto
 import unittest
+from threading import Thread
+
 
 URL_TASK = 'http://127.0.0.1:5000/api/change_task'
 
@@ -35,6 +37,11 @@ def save_test(data):
         f.write(data)
 
 
+def start_check(user_data):
+    check_tasks = Thread(target=check, args=(user_data, ))
+    check_tasks.start()
+
+
 def check(user_data):
 
     print(user_data)
@@ -46,7 +53,7 @@ def check(user_data):
     task = get_task_file(user_data.lesson)['tasks'][user_data.task]
     for test in task['data']:
 
-        output = subprocess.check_output("python3 check_test.py", shell=True, encoding='utf-8')
+        output = subprocess.check_output("python check_test.py", shell=True, encoding='utf-8')
         print(output.decode('utf-8'), test)
         if output == test['data_out']:
             print('Верно')
@@ -66,4 +73,4 @@ if __name__ == '__main__':
         "lesson": 1,
         "task": 0
     }
-    check(a)
+    start_check(a)

@@ -6,7 +6,7 @@ from .utils import get_task_file
 from . import db
 from .models import Tasks
 
-from .check_task import check
+from .check_task import start_check
 
 main = Blueprint('main', __name__)
 
@@ -38,6 +38,16 @@ def lesson(num_lesson):
 
     return render_template('task.html', name=current_user.name, lessons=file['tasks'],
                            count=len(file['tasks']), lesson=num_lesson)
+
+
+@main.route('/lesson')
+@login_required
+def back():
+
+    file = get_task_file(1)
+
+    return render_template('task.html', name=current_user.name, lessons=file['tasks'],
+                           count=len(file['tasks']), lesson=1)
 
 
 @main.route('/task/<int:lesson>_<int:task>', methods=['GET'])
@@ -73,7 +83,7 @@ def submit(num_lesson, num_task):
 
     file = get_task_file(num_lesson)
 
-    # check(task)
+    start_check(task)
 
     return render_template('task_num.html', tasks=file['tasks'][num_task],
                            num=(num_task + 1), text=request.form.get("form-text"), lesson=num_lesson,
