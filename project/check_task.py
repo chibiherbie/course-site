@@ -2,12 +2,13 @@ import os
 import subprocess
 from .utils import get_task_file
 # import test
-import pywinauto
-import unittest
+# import pywinauto
+# import unittest
 from threading import Thread
 
 
 URL_TASK = 'http://127.0.0.1:5000/api/change_task'
+
 
 def check_2():
     """
