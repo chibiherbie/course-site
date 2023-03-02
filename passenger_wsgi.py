@@ -6,4 +6,4 @@ from project import create_app # когда Flask стартует, он ище�
 application = create_app()
 from werkzeug.debug import DebuggedApplication # Опционально: подключение модуля отладки
 application.wsgi_app = DebuggedApplication(application.wsgi_app, True) # Опционально: включение модуля отадки
-application.debug = False  # Опционально: True/False устанавливается по необходимости в отладк
+application.debug = True  # Опционально: True/False устанавливается по необходимости в отладк
