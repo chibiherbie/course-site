@@ -12,7 +12,7 @@
                                 Ты всё можешь, {{ name }}!
                             </h1>
                             <h2 class="subtitle">
-                                Осталось совсем чуть-чуть
+                                Покажи себя ;)
                             </h2>
                         </div>
                     </div>
@@ -55,7 +55,14 @@
                                                 <td >{{ num + 1 }}</td>
                                                 <td >0/{{ lessons[num].score }} S</td>
                                                 <td>{{ lessons[num].name }}</td>
-                                                <td class="level-right"><a class="button" href="/task/{{ lesson }}_{{ num }}">Решить</a></td>
+                                                <td class="level-right">
+                                                    <a class="button {% if did_tasks.get(num).completed == null and not did_tasks.get(num).is_check %} is-white
+                                                                     {% elif did_tasks.get(num).is_check %}is-warning
+                                                                     {% elif did_tasks.get(num).completed %}is-success
+                                                                     {% elif not did_tasks.get(num).completed and not did_tasks.get(num).is_check %} is-danger
+                                                                     {% endif %}"
+                                                       href="/task/{{ lesson }}_{{ num }}">Решить</a>
+                                                </td>
                                             </tr>
                                             {% endfor %}
 

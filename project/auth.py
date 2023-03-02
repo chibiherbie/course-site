@@ -42,11 +42,20 @@ def signup_post():
     email = request.form.get('email')
     name = request.form.get('name')
     password = request.form.get('password')
+    password2 = request.form.get('password2')
 
-    user = User.query.filter_by(email=email).first()  # if this returns a user, then the email already exists in database
+    user = User.query.filter_by(email=email).first()  # if this returns a user, then the email already exists in db
 
     if user:  # if a user is found, we want to redirect back to signup page so user can try again
-        flash('Email уже зарегистрирован')
+        flash('Такой email уже зарегистрирован')
+        return redirect(url_for('auth.signup'))
+
+    if password != password2:
+        flash('Пароли не совпадают')
+        return redirect(url_for('auth.signup'))
+
+    if len(password) < 8:
+        flash('Пароль должен быть больше 8 символов')
         return redirect(url_for('auth.signup'))
 
     # create a new user with the form data. Hash the password so the plaintext version isn't saved.
@@ -56,7 +65,10 @@ def signup_post():
     db.session.add(new_user)
     db.session.commit()
 
-    return redirect(url_for('auth.login'))
+    user = User.query.filter_by(email=email).first()
+    login_user(user)
+    return redirect(url_for('main.profile'))
+    # return redirect(url_for('auth.login'))
 
 
 @auth.route('/logout')

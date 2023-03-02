@@ -18,7 +18,7 @@
          <br>
          <h4>Условия</h4>
          {% for text in tasks.description %}
-            <p>{{ text }}</p><br>
+            <p>{{ text|safe }}</p><br>
          {% endfor %}
      </div>
 </div>
@@ -38,8 +38,8 @@
              {% for dat in tasks.data %}
                 <tr>
                   <th>{{ dat.num }}</th>
-                  <td>{{ dat.data_in }}</td>
-                  <td>{{ dat.data_out }}</td>
+                  <td>{{ dat.data_in|safe }}</td>
+                  <td>{{ dat.data_out|safe }}</td>
                 </tr>
              {% endfor %}
          </tbody>

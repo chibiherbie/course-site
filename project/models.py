@@ -7,7 +7,12 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
+    super_user = db.Column(db.Boolean, default=False)
+    money = db.Column(db.Integer, default=0)
     tasks = db.relationship('Tasks', backref='user')
+
+    def is_admin(self):
+        return self.super_user
 
 
 class Tasks(db.Model):
@@ -16,5 +21,5 @@ class Tasks(db.Model):
     lesson = db.Column(db.Integer)
     task = db.Column(db.Integer)
     completed = db.Column(db.Boolean)
-    # is_check = db.Column(db.Boolean)
+    is_check = db.Column(db.Boolean)
     text = db.Column(db.String())
