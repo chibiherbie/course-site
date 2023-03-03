@@ -56,7 +56,7 @@
                                                 <td >0/{{ lessons[num].score }} S</td>
                                                 <td>{{ lessons[num].name }}</td>
                                                 <td class="level-right">
-                                                    <a class="button {% if did_tasks.get(num).completed == null and not did_tasks.get(num).is_check %} is-white
+                                                    <a class="button {% if did_tasks.get(num).completed == null and not did_tasks.get(num).is_check %} is-gray
                                                                      {% elif did_tasks.get(num).is_check %}is-warning
                                                                      {% elif did_tasks.get(num).completed %}is-success
                                                                      {% elif not did_tasks.get(num).completed and not did_tasks.get(num).is_check %} is-danger
