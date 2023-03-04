@@ -55,7 +55,13 @@
 </div>
 </div>
 
- <button class="button is-normal is-light is-pulled-left"><a href="{{ url_for('main.lesson', num_lesson=lesson) }}">Вернуться назад</a></button>
+ <button class="button is-normal is-light is-pulled-left"><a href="{{ url_for('main.lesson', num_lesson=lesson) }}">Вернуться к задачам</a></button>
+    {% if isLast %}
+    <span class="is-pulled-right">
+{#        <button class="button is-normal is-light "><a href="{{ url_for('main.lesson', num_lesson=lesson) }}">Предыдущая задача</a></button>#}
+        <button class="button is-normal is-light"><a href="{{ url_for('main.task_num', lesson=lesson, task=num) }}">Следующая задача</a></button>
+    </span>
+    {% endif %}
 {# <button class="button is-normal is-light is-pulled-right"><a href="{{ url_for('main.lesson', num_lesson=lesson) }}">Ошибка в задание</a></button>#}
 
 {% endblock %}

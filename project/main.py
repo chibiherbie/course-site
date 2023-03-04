@@ -72,8 +72,10 @@ def task_num(lesson, task):
         tasks['data'][num]['data_in'] = i['data_in'].replace('\n', '<br/>')
         tasks['data'][num]['data_out'] = i['data_out'].replace('\n', '<br/>')
 
+    isLast = True if task + 1 < len(file['tasks']) else False
+    print(len(file['tasks']), task)
     return render_template('task_num.html', tasks=file['tasks'][task],
-                           num=(task + 1), text=text, lesson=lesson, charset='utf8')
+                           num=(task + 1), text=text, lesson=lesson, charset='utf8', isLast=isLast)
 
 
 @main.route('/submit/<int:num_lesson>_<int:num_task>', methods=['POST'])
