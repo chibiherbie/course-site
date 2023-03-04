@@ -73,7 +73,7 @@ def task_num(lesson, task):
         tasks['data'][num]['data_out'] = i['data_out'].replace('\n', '<br/>')
 
     isLast = True if task + 1 < len(file['tasks']) else False
-    print(len(file['tasks']), task)
+
     return render_template('task_num.html', tasks=file['tasks'][task],
                            num=(task + 1), text=text, lesson=lesson, charset='utf8', isLast=isLast)
 
@@ -102,9 +102,11 @@ def submit(num_lesson, num_task):
 
     start_check(task)
 
+    isLast = True if num_task + 1 < len(file['tasks']) else False
+
     return render_template('task_num.html', tasks=file['tasks'][num_task],
                            num=(num_task + 1), text=request.form.get("form-text"), lesson=num_lesson,
-                           answer='Решение отправлено')
+                           answer='Решение отправлено', isLast=isLast)
 
 
 @main.route('/api/change_task', methods=['POST'])
