@@ -100,7 +100,7 @@ def submit(num_lesson, num_task):
 
     file = get_task_file(num_lesson)
 
-    start_check(task)
+    # start_check(task)
 
     isLast = True if num_task + 1 < len(file['tasks']) else False
 
