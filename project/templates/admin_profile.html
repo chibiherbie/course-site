@@ -1,22 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 class="title">
-      Admin
-    </h1>
-
-    <section class="info-tiles">
+<h1 class="title">
+  Твой профиль, {{ name }}!
+</h1>
+     <section class="info-tiles">
             <div class="tile is-ancestor has-text-centered">
                 <div class="tile is-parent">
                     <article class="tile is-child box">
-                        <p class="title has-text-dark">{{ len_users }}</p>
-                        <p class="subtitle has-text-dark">Всего пользователей</p>
+                        <p class="title has-text-dark">{{ len_tasks }}</p>
+                        <p class="subtitle has-text-dark">решено задач</p>
                     </article>
                 </div>
                 <div class="tile is-parent">
                     <article class="tile is-child box">
-                        <p class="title has-text-dark">{{ len_tasks }}</p>
-                        <p class="subtitle has-text-dark">Отправлено решений</p>
+                        <p class="title has-text-dark">0</p>
+                        <p class="subtitle has-text-dark">Кол-во монет</p>
                     </article>
                 </div>
                 <div class="tile is-parent">
@@ -27,29 +26,26 @@
                 </div>
             </div>
      </section>
-    <br>
-    <br>
+
     <section class="info-tiles">
         <div class="tile is-ancestor has-text-centered">
             <div class="tile is-parent">
                 <table class="table is-bordered is-fullwidth has-text-centered">
                     <thead>
                         <tr>
-                          <th><abbr>id</abbr></th>
-                          <th><abbr>Имя ользователь</abbr></th>
-                          <th><abbr>Почта</abbr></th>
-                          <th><abbr>SibCoin</abbr></th>
-                          <th><abbr>Задач отп.</abbr></th>
+                          <th><abbr>Урок</abbr></th>
+                          <th><abbr>Задача</abbr></th>
+                          <th><abbr>Выполнено</abbr></th>
+                          <th><abbr>На проверке</abbr></th>
                         </tr>
                     </thead>
                     <tbody>
-                     {% for user in users %}
+                     {% for task in tasks %}
                          <tr>
-                          <th><a href="{{ url_for('admin.info_user', user_id=user.id) }}">{{ user.id }}</a></th>
-                          <th>{{ user.name }}</th>
-                          <th>{{ user.email }}</th>
-                          <th>{{ user.money }}</th>
-                          <th>{{ count_task_user[user.id] }}</th>
+                          <th><a href="{{ url_for('admin.info_task_user', lesson=task.lesson, task=task.task, user_id=user.id) }}">{{ task.lesson }}</a></th>
+                          <th>{{ task.task }}</th>
+                          <th>{{ task.completed }}</th>
+                          <th>{{ task.is_check }}</th>
                         </tr>
                      {% endfor %}
                     </tbody>
@@ -58,5 +54,4 @@
             </div>
         </div>
      </section>
-
 {% endblock %}

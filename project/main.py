@@ -99,8 +99,8 @@ def submit(num_lesson, num_task):
         db.session.commit()
 
     file = get_task_file(num_lesson)
-
-    # start_check(task)
+    # print(task)
+    task = start_check.delay({'text': task.text, "lesson": task.lesson, "task": task.task})
 
     isLast = True if num_task + 1 < len(file['tasks']) else False
 
@@ -109,26 +109,26 @@ def submit(num_lesson, num_task):
                            answer='Решение отправлено', isLast=isLast)
 
 
-@main.route('/api/change_task', methods=['POST'])
-@login_required
-def api_task():
-    """Меняем статус задачи"""
-
-    task = Tasks.query.filter_by(user_id=current_user.id, lesson=num_lesson, task=num_task).first()
-
-    if task:
-        # решение уже было
-        task.text = request.form.get("form-text")
-        db.session.commit()
-
-    else:
-        # Новое решение
-        task = Tasks(user_id=current_user.id, lesson=num_lesson, task=num_task, completed=False,
-                     text=request.form.get("form-text"))
-        db.session.add(task)
-        db.session.commit()
-
-    return ""
-
+# @main.route('/api/change_task', methods=['POST'])
+# @login_required
+# def api_task():
+#     """Меняем статус задачи"""
+#
+#     task = Tasks.query.filter_by(user_id=current_user.id, lesson=num_lesson, task=num_task).first()
+#
+#     if task:
+#         # решение уже было
+#         task.text = request.form.get("form-text")
+#         db.session.commit()
+#
+#     else:
+#         # Новое решение
+#         task = Tasks(user_id=current_user.id, lesson=num_lesson, task=num_task, completed=False,
+#                      text=request.form.get("form-text"))
+#         db.session.add(task)
+#         db.session.commit()
+#
+#     return ""
+#
 
 

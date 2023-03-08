@@ -5,6 +5,8 @@ from .utils import get_task_file
 # import pywinauto
 # import unittest
 from threading import Thread
+from time import sleep
+from celery import shared_task
 
 
 URL_TASK = 'http://127.0.0.1:5000/api/change_task'
@@ -38,28 +40,30 @@ def save_test(data):
         f.write(data)
 
 
-def start_check(user_data):
-    check_tasks = Thread(target=check, args=(user_data, ))
-    check_tasks.start()
+@shared_task(bind=True)
+def start_check(self, user_data):
 
-
-def check(user_data):
-
-    print(user_data)
-    # print(user_data.text)
-    # print(user_data.lesson)
-    # print(user_data.task)
+    print(1, user_data)
+    sleep(1)
+    print(2, user_data['text'])
+    sleep(2)
+    print(3, user_data['lesson'])
+    sleep(3)
+    print(4, user_data['task'])
+    sleep(10)
     # save_test(user_data.text)
 
-    task = get_task_file(user_data.lesson)['tasks'][user_data.task]
-    for test in task['data']:
-
-        output = subprocess.check_output("python check_test.py", shell=True, encoding='utf-8')
-        print(output.decode('utf-8'), test)
-        if output == test['data_out']:
-            print('Верно')
-        else:
-            print('Не верно')
+    # ---НАДО!!---
+    # task = get_task_file(user_data.lesson)['tasks'][user_data.task]
+    # for test in task['data']:
+    #
+    #     output = subprocess.check_output("python check_test.py", shell=True, encoding='utf-8')
+    #     print(output.decode('utf-8'), test)
+    #     if output == test['data_out']:
+    #         print('Верно')
+    #     else:
+    #         print('Не верно')
+    # ------------
 
     #
     # p = subprocess.Popen('python test.py', stdout=subprocess.PIPE, stdin=subprocess.PIPE)
@@ -67,6 +71,7 @@ def check(user_data):
     # # p.stdin.write(b'123')
     # stdout, stderr = p.communicate(input=b'123\n123')
     # print(stdout.decode())
+    return False
 
 
 if __name__ == '__main__':
