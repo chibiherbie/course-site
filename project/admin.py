@@ -62,6 +62,65 @@ def info_task_user(lesson, task, user_id):
 
         isLast = True if task + 1 < len(file['tasks']) else False
 
+        admin_data = {"user_id": user_id}
+
         return render_template('task_num.html', tasks=file['tasks'][task],
-                               num=(task + 1), text=text, lesson=lesson, charset='utf8', isLast=isLast)
+                               num=(task + 1), text=text, lesson=lesson, charset='utf8', isLast=isLast,
+                               admin_data=admin_data)
     return redirect(url_for('main.index'))
+
+
+@admin.route('/api/<int:user_id>')
+@login_required
+def check_all_task_user(user_id):
+    print(user_id)
+    if current_user.is_admin():
+        print(user_id)
+        tasks = Tasks.query.filter_by(user_id=user_id).all()
+        user = User.query.filter_by(id=user_id).first()
+
+        # file = get_task_file(num_lesson)
+        # print(task)
+        # task = start_check.delay({'text': task.text, "lesson": task.lesson, "task": task.task})
+        print(tasks)
+        money = 0
+
+        for task in tasks:
+            res = start_check({'text': task.text, "lesson": task.lesson, "task": task.task})
+            task.is_check = False
+            task.completed = res
+            if res:
+                file = get_task_file(task.lesson)
+                money += file['tasks'][task.task]['score']
+            print(res)
+
+        print(tasks)
+        print(money)
+        user.money = money
+        db.session.commit()
+        # isLast = True if num_task + 1 < len(file['tasks']) else False
+
+        return {'status': 'Ok'}
+    return redirect(url_for('main.index'))
+
+
+@admin.route('/api/<int:lesson>_<int:task>_<int:user_id>_<int:completed>', methods=['GET'])
+@login_required
+def submit_task(lesson, task, user_id, completed):
+    """Добовляем решение задачи"""
+    print(completed)
+    task = Tasks.query.filter_by(user_id=user_id, lesson=lesson, task=task-1).first()
+
+    if task and completed:
+        task.completed = True
+        task.is_check = False
+        db.session.commit()
+        print('Исправлено')
+        return 'Исправлено на True'
+    elif task and not completed:
+        task.completed = False
+        task.is_check = False
+        db.session.commit()
+        print('Исправлено')
+        return 'Исправлено на False'
+    return 'Not found task'

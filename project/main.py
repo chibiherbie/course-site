@@ -1,10 +1,12 @@
+import operator
+
 from flask import request
 
 from flask import Blueprint, render_template, redirect
 from flask_login import login_required, current_user
 from .utils import get_task_file
 from . import db
-from .models import Tasks
+from .models import Tasks, User
 
 from .check_task import start_check
 
@@ -20,8 +22,10 @@ def index():
 @login_required
 def profile():
     tasks = Tasks.query.filter_by(user_id=current_user.id, completed=True).all()
-
-    return render_template('profile.html', name=current_user.name, tasks=len(tasks), money=current_user.money)
+    users = User.query.filter_by().all()
+    uest_position = sorted(users, key=operator.attrgetter('money'), reverse=True).index(current_user) + 1
+    return render_template('profile.html', name=current_user.name, tasks=len(tasks), money=current_user.money,
+                           position=uest_position)
 
 
 @main.route('/lessons')
@@ -100,13 +104,14 @@ def submit(num_lesson, num_task):
 
     file = get_task_file(num_lesson)
     # print(task)
-    task = start_check.delay({'text': task.text, "lesson": task.lesson, "task": task.task})
+    # task = start_check.delay({'text': task.text, "lesson": task.lesson, "task": task.task})
+    # start_check({'text': task.text, "lesson": task.lesson, "task": task.task})
 
     isLast = True if num_task + 1 < len(file['tasks']) else False
 
     return render_template('task_num.html', tasks=file['tasks'][num_task],
                            num=(num_task + 1), text=request.form.get("form-text"), lesson=num_lesson,
-                           answer='Решение отправлено', isLast=isLast)
+                           answer='Решение отправлено', isLast=isLast, charset='utf8')
 
 
 # @main.route('/api/change_task', methods=['POST'])

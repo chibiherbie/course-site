@@ -53,7 +53,11 @@
                                             {% for num in range(count) %}
                                             <tr>
                                                 <td >{{ num + 1 }}</td>
-                                                <td >0/{{ lessons[num].score }} S</td>
+                                                <td >
+                                                    {% if did_tasks.get(num).completed %}
+                                                        {{ lessons[num].score }}{% else %}
+                                                        0{% endif %}/{{ lessons[num].score }} S
+                                                </td>
                                                 <td>{{ lessons[num].name }}</td>
                                                 <td class="level-right">
                                                     <a class="button {% if did_tasks.get(num).completed == null and not did_tasks.get(num).is_check %} is-gray

@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 import os
 import subprocess
 from .utils import get_task_file
+# from utils import get_task_file
 # import test
 # import pywinauto
 # import unittest
@@ -40,29 +42,45 @@ def save_test(data):
         f.write(data)
 
 
-@shared_task(bind=True)
-def start_check(self, user_data):
+# @shared_task(bind=True)
+def start_check(user_data):
 
-    print(1, user_data)
-    sleep(1)
-    print(2, user_data['text'])
-    sleep(2)
-    print(3, user_data['lesson'])
-    sleep(3)
-    print(4, user_data['task'])
-    sleep(10)
-    # save_test(user_data.text)
+    # print(1, user_data)
+    # sleep(1)
+    # print(2, user_data['text'])
+    # sleep(2)
+    # print(3, user_data['lesson'])
+    # sleep(3)
+    # print(4, user_data['task'])
+    # sleep(10)
+    save_test(user_data['text'])
 
-    # ---НАДО!!---
-    # task = get_task_file(user_data.lesson)['tasks'][user_data.task]
-    # for test in task['data']:
-    #
-    #     output = subprocess.check_output("python check_test.py", shell=True, encoding='utf-8')
-    #     print(output.decode('utf-8'), test)
-    #     if output == test['data_out']:
-    #         print('Верно')
-    #     else:
-    #         print('Не верно')
+    task = get_task_file(user_data['lesson'])['tasks'][user_data['task']]
+    print(task)
+    for test in task['data']:
+        print(test['num'])
+
+        try:
+            output = subprocess.check_output("python check_test.py", shell=True,
+                                             input=test['data_in'].encode('WINDOWS-1251')).decode('WINDOWS-1251')
+            # print(output.decode('WINDOWS-1251'), test)
+            output = output.replace('\r', '')[:-1]
+
+            print(repr(output), '_-_-_', repr(test['data_out']))
+            if output == test['data_out']:
+                print('Верно')
+            else:
+                print('Не верно')
+                return False
+        except SyntaxError as error:
+            print('Синтаксическая ошибка')
+            return False
+        except Exception as e:
+            print(type(e))
+            print('Ошибка в коде')
+            return False
+
+    return True
     # ------------
 
     #
@@ -71,7 +89,6 @@ def start_check(self, user_data):
     # # p.stdin.write(b'123')
     # stdout, stderr = p.communicate(input=b'123\n123')
     # print(stdout.decode())
-    return False
 
 
 if __name__ == '__main__':
@@ -79,4 +96,4 @@ if __name__ == '__main__':
         "lesson": 1,
         "task": 0
     }
-    start_check(a)
+    start_check({'text': '123', "lesson": '1', "task": '2'})

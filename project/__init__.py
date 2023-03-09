@@ -15,7 +15,7 @@ def create_app():
 
     app.config['SECRET_KEY'] = 'YEEES_sibHub'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-    app.config['CELERY_BROKER_URL'] = 'amqp://guest:guest@sib-hub:5000//'
+    app.config['CELERY_BROKER_URL'] = 'amqp://guest:guest@localhost:5000//'
     app.config['CELERY_RESULT_BACKEND'] = 'db+sqlite:///db.sqlite'
 
     db.init_app(app)

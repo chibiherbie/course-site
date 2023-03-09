@@ -44,14 +44,18 @@
                          <tr>
                           <th><a href="{{ url_for('admin.info_task_user', lesson=task.lesson, task=task.task, user_id=user.id) }}">{{ task.lesson }}</a></th>
                           <th>{{ task.task }}</th>
-                          <th>{{ task.completed }}</th>
+                          <th class="{% if task.completed %} has-text-success
+                                                                     {% elif not task.completed %} has-text-danger
+                                                                     {% endif %}">
+                              <a href="{{ url_for('admin.info_task_user', lesson=task.lesson, task=task.task, user_id=user.id) }}">{{ task.completed }}</a>
+                          </th>
                           <th>{{ task.is_check }}</th>
                         </tr>
                      {% endfor %}
                     </tbody>
-
                 </table>
             </div>
         </div>
+     <button class="button is-normal is-light"><a href="{{ url_for('admin.check_all_task_user', user_id=user.id) }}">Проверить задачи</a></button>
      </section>
 {% endblock %}
