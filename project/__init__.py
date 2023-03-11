@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-import click
 from flask import Flask
-from flask_redis import FlaskRedis
+
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
