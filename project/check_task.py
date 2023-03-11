@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
 import subprocess
+
+from project.models import Tasks
 from .utils import get_task_file
-# from utils import get_task_file
-# import test
-# import pywinauto
-# import unittest
-from threading import Thread
 from time import sleep
-from celery import shared_task
+from . import db
 
 
 URL_TASK = 'http://127.0.0.1:5000/api/change_task'
@@ -37,22 +34,35 @@ def check_2():
     # print(a)
 
 
+def run():
+    # run some code here
+    print('Threaded task has been completed 1')
+    sleep(10)
+    print('Threaded task has been completed 2')
+    sleep(1)
+    print('Threaded task has been completed 3')
+
+
 def save_test(data):
     with open('check_test.py', mode='w', encoding='utf-8') as f:
         f.write(data)
 
 
-# @shared_task(bind=True)
-def start_check(user_data):
+def start_check():
+    print('Получены запрос')
+    print('Получены запрос')
+    tasks = Tasks.query.filter_by(is_check=True).all()
+    print('Получены запрос')
+    print(tasks)
+    for task in tasks:
+        print('Перебираем все задачи')
+        res = check_task({'text': task.text, "lesson": task.lesson, "task": task.task})
+        task.completed = res
+        task.is_check = False
+        db.session.commit()
 
-    # print(1, user_data)
-    # sleep(1)
-    # print(2, user_data['text'])
-    # sleep(2)
-    # print(3, user_data['lesson'])
-    # sleep(3)
-    # print(4, user_data['task'])
-    # sleep(10)
+
+def check_task(user_data):
     save_test(user_data['text'])
 
     task = get_task_file(user_data['lesson'])['tasks'][user_data['task']]

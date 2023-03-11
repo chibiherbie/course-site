@@ -1,4 +1,7 @@
+import json
 import operator
+import time
+from threading import Thread
 
 from flask import request
 
@@ -8,13 +11,21 @@ from .utils import get_task_file
 from . import db
 from .models import Tasks, User
 
-from .check_task import start_check
+from .check_task import start_check, run, check_task
+from concurrent.futures import ThreadPoolExecutor
+
 
 main = Blueprint('main', __name__)
 
+executor = ThreadPoolExecutor(1)
 
-@main.route('/')
+
+@main.route('/', methods=['GET'])
 def index():
+
+    # TEST
+    # executor.submit(run)
+
     return render_template('index.html')
 
 
@@ -82,6 +93,7 @@ def task_num(lesson, task):
                            num=(task + 1), text=text, lesson=lesson, charset='utf8', isLast=isLast)
 
 
+
 @main.route('/submit/<int:num_lesson>_<int:num_task>', methods=['POST'])
 @login_required
 def submit(num_lesson, num_task):
@@ -103,9 +115,11 @@ def submit(num_lesson, num_task):
         db.session.commit()
 
     file = get_task_file(num_lesson)
-    # print(task)
-    # task = start_check.delay({'text': task.text, "lesson": task.lesson, "task": task.task})
-    # start_check({'text': task.text, "lesson": task.lesson, "task": task.task})
+
+    # start_check()
+    # executor.submit(start_check)
+    # start_check()
+    # check_task({'text': task.text, "lesson": task.lesson, "task": task.task})
 
     isLast = True if num_task + 1 < len(file['tasks']) else False
 
@@ -113,27 +127,18 @@ def submit(num_lesson, num_task):
                            num=(num_task + 1), text=request.form.get("form-text"), lesson=num_lesson,
                            answer='Решение отправлено', isLast=isLast, charset='utf8')
 
-
-# @main.route('/api/change_task', methods=['POST'])
-# @login_required
-# def api_task():
+#
+# @main.route('/get_users/<int:token>', methods=['GET'])
+# def api_task(token):
 #     """Меняем статус задачи"""
+#     if token == 1423:
+#         from flask import jsonify, json
 #
-#     task = Tasks.query.filter_by(user_id=current_user.id, lesson=num_lesson, task=num_task).first()
+#         user = User.query.filter_by().all()
+#         print(json.dumps(user[0]))
+#         print(jsonify(user[0]))
+#         a = [{""} for i in user]
+#         return {"users": response}
+#     return {'result': "Ok"}
 #
-#     if task:
-#         # решение уже было
-#         task.text = request.form.get("form-text")
-#         db.session.commit()
-#
-#     else:
-#         # Новое решение
-#         task = Tasks(user_id=current_user.id, lesson=num_lesson, task=num_task, completed=False,
-#                      text=request.form.get("form-text"))
-#         db.session.add(task)
-#         db.session.commit()
-#
-#     return ""
-#
-
 

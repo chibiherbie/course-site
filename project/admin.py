@@ -8,7 +8,7 @@ from .utils import get_task_file
 from . import db
 from .models import Tasks, User
 
-from .check_task import start_check
+from .check_task import start_check, check_task
 
 admin = Blueprint('admin', __name__)
 
@@ -23,9 +23,9 @@ def index_admin():
         count_task_user = {}
         for user in users:
             count_task_user[user.id] = len(Tasks.query.filter_by(user_id=user.id).all())
-
+        print(tasks[-10:])
         return render_template('admin.html', len_users=len(users), len_tasks=len(tasks), users=users,
-                               count_task_user=count_task_user)
+                               count_task_user=count_task_user, last_task=tasks[-10:])
     return redirect(url_for('main.index'))
 
 
@@ -86,7 +86,7 @@ def check_all_task_user(user_id):
         money = 0
 
         for task in tasks:
-            res = start_check({'text': task.text, "lesson": task.lesson, "task": task.task})
+            res = check_task({'text': task.text, "lesson": task.lesson, "task": task.task})
             task.is_check = False
             task.completed = res
             if res:

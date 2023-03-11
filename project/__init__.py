@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import click
 from flask import Flask
+from flask_redis import FlaskRedis
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from werkzeug.security import generate_password_hash
-from .utils import make_celery
+# from .utils import make_celery
 
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
@@ -15,13 +17,15 @@ def create_app():
 
     app.config['SECRET_KEY'] = 'YEEES_sibHub'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-    app.config['CELERY_BROKER_URL'] = 'amqp://guest:guest@localhost:5000//'
-    app.config['CELERY_RESULT_BACKEND'] = 'db+sqlite:///db.sqlite'
+    app.config['CELERY_BROKER_URL'] = 'redis://localhost:5000/0'
+    app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:5000/0'
+    app.config['threaded'] = True
+    app.config['threaded'] = True
 
     db.init_app(app)
 
-    celery = make_celery(app)
-    celery.set_default()
+    # celery = make_celery(app)
+    # celery.set_default()
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
@@ -56,5 +60,9 @@ def create_app():
                             password=generate_password_hash(password, method='sha256'), super_user=True))
         db.session.commit()
 
-    return app, celery
+    return app
 
+
+if __name__ == "__main__":
+    a, b = create_app()
+    a.run(host='0.0.0.0', threaded=True)

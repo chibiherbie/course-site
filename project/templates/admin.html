@@ -59,4 +59,38 @@
         </div>
      </section>
 
+    <section class="info-tiles">
+        <div class="tile is-ancestor has-text-centered">
+            <div class="tile is-parent">
+                <table class="table is-bordered is-fullwidth has-text-centered">
+                    <thead>
+                        <tr>
+                          <th><abbr>id</abbr></th>
+                          <th><abbr>Урок</abbr></th>
+                          <th><abbr>Задача</abbr></th>
+                          <th><abbr>Выполнено</abbr></th>
+                          <th><abbr>На проверке</abbr></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                     {% for task in last_task %}
+                         <tr>
+                         <th>{{ task.user_id }}</th>
+                          <th><a href="{{ url_for('admin.info_task_user', lesson=task.lesson, task=task.task, user_id=task.user_id) }}">{{ task.lesson }}</a></th>
+                          <th>{{ task.task }}</th>
+                          <th class="{% if task.completed %} has-text-success
+                                                                     {% elif not task.completed %} has-text-danger
+                                                                     {% endif %}">
+                              <a href="{{ url_for('admin.info_task_user', lesson=task.lesson, task=task.task, user_id=task.user_id) }}">{{ task.completed }}</a>
+                          </th>
+                          <th>{{ task.is_check }}</th>
+                        </tr>
+                     {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+     </section>
+
 {% endblock %}
