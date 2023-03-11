@@ -222,7 +222,7 @@
       "data": [
         {
           "num": 1,
-          "data_in": "5\nЯзык Python прекрасен\nC# - отличный язык программирования\nSIBHUUUB\nязык Python появился 20 февраля 1991\n2\nязык\npython",
+          "data_in": "5\nЯзык Python прекрасен\nC# - отличный язык программирования\nSIBHUUUB\n1234567789\nязык Python появился 20 февраля 1991\n2\nязык\npython",
           "data_out": "Язык Python прекрасен\nязык Python появился 20 февраля 1991"
         },
         {
@@ -232,8 +232,8 @@
         },
         {
           "num": 3,
-          "data_in": "6\nЯзык Python прекрасен\nC# - отличный язык программирования\nYou - krutoi\nSIBHUB qwerty FOREVER навсегда! gaga\nязык Python появился 20 февраля 1991\nпчела beegeek лучшая как всегдаgaga qwerty\n4\nsibhub\nВсегда\ngaga\nqwerty",
-          "data_out": "SIBHUB qwerty FOREVER навсегда! gaga\nAtomic лучший как всегдаgaga qwerty"
+          "data_in": "6\nЯзык Python прекрасен\nC# - отличный язык программирования\nYou - krutoi\nSIBHUB qwerty FOREVER навсегда! gaga\nязык Python появился 20 февраля 1991\nAtomic sibhub лучший как всегдаgaga qwerty\n4\nsibhub\nВсегда\ngaga\nqwerty",
+          "data_out": "SIBHUB qwerty FOREVER навсегда! gaga\nAtomic sibhub лучший как всегдаgaga qwerty"
         }
       ]
     },
