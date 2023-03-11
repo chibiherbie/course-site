@@ -23,9 +23,10 @@ def index_admin():
         count_task_user = {}
         for user in users:
             count_task_user[user.id] = len(Tasks.query.filter_by(user_id=user.id).all())
-        print(tasks[-10:])
+
+        tasks_f = Tasks.query.filter_by(is_check=True).all()
         return render_template('admin.html', len_users=len(users), len_tasks=len(tasks), users=users,
-                               count_task_user=count_task_user, last_task=tasks[-10:])
+                               count_task_user=count_task_user, last_task=tasks_f[-10:][::-1])
     return redirect(url_for('main.index'))
 
 
