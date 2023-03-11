@@ -116,12 +116,10 @@ def submit_task(lesson, task, user_id, completed):
         task.completed = True
         task.is_check = False
         db.session.commit()
-        print('Исправлено')
         return 'Исправлено на True'
     elif task and not completed:
         task.completed = False
         task.is_check = False
         db.session.commit()
-        print('Исправлено')
         return 'Исправлено на False'
     return 'Not found task'
