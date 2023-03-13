@@ -87,6 +87,8 @@ def check_all_task_user(user_id):
         money = 0
 
         for task in tasks:
+            # if not task.is_check:
+            #     continue
             res = check_task({'text': task.text, "lesson": task.lesson, "task": task.task})
             task.is_check = False
             task.completed = res
@@ -110,11 +112,14 @@ def check_all_task_user(user_id):
 def submit_task(lesson, task, user_id, completed):
     """Добовляем решение задачи"""
     print(completed)
+    user = User.query.filter_by(id=user_id).first()
     task = Tasks.query.filter_by(user_id=user_id, lesson=lesson, task=task-1).first()
 
     if task and completed:
         task.completed = True
         task.is_check = False
+        file = get_task_file(task.lesson)
+        user.money += file['tasks'][task.task]['score']
         db.session.commit()
         return 'Исправлено на True'
     elif task and not completed:
