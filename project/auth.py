@@ -17,6 +17,7 @@ def login():
 def login_post():
     email = request.form.get('email')
     password = request.form.get('password')
+    api = request.form.get('api')
     remember = True if request.form.get('remember') else False
 
     user = User.query.filter_by(email=email).first()
@@ -29,6 +30,10 @@ def login_post():
 
     # if the above check passes, then we know the user has the right credentials
     login_user(user, remember=remember)
+
+    if api:
+        return {'OK': 'Ok'}
+
     return redirect(url_for('main.profile'))
 
 

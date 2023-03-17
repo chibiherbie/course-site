@@ -127,7 +127,7 @@ def submit(num_lesson, num_task):
                            num=(num_task + 1), text=request.form.get("form-text"), lesson=num_lesson,
                            answer='Решение отправлено', isLast=isLast, charset='utf8')
 
-#
+
 # @main.route('/get_users/<int:token>', methods=['GET'])
 # def api_task(token):
 #     """Меняем статус задачи"""
@@ -140,5 +140,3 @@ def submit(num_lesson, num_task):
 #         a = [{""} for i in user]
 #         return {"users": response}
 #     return {'result': "Ok"}
-#
-
