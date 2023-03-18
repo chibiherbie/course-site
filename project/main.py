@@ -137,5 +137,5 @@ def api_task(token):
         user = User.query.filter_by().all()
         a = {i.email: str(i.money) for i in user}
         print(a)
-        return {"users": json.dumps(a)}
+        return json.dumps(a)
     return {'result': "Ok"}
