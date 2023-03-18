@@ -128,15 +128,14 @@ def submit(num_lesson, num_task):
                            answer='Решение отправлено', isLast=isLast, charset='utf8')
 
 
-# @main.route('/get_users/<int:token>', methods=['GET'])
-# def api_task(token):
-#     """Меняем статус задачи"""
-#     if token == 1423:
-#         from flask import jsonify, json
-#
-#         user = User.query.filter_by().all()
-#         print(json.dumps(user[0]))
-#         print(jsonify(user[0]))
-#         a = [{""} for i in user]
-#         return {"users": response}
-#     return {'result': "Ok"}
+@main.route('/get_users/<int:token>', methods=['GET'])
+def api_task(token):
+    """Меняем статус задачи"""
+    if token == 1423:
+        from flask import jsonify, json
+
+        user = User.query.filter_by().all()
+        a = {i.email: str(i.money) for i in user}
+        print(a)
+        return {"users": json.dumps(a)}
+    return {'result': "Ok"}
