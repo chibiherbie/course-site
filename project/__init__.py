@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from flask import Flask
 
-
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from werkzeug.security import generate_password_hash
+
 # from .utils import make_celery
 
 # init SQLAlchemy so we can use it later in our models
@@ -55,8 +55,14 @@ def create_app():
     def create_superuser():
         email = input('Insert email of superuser: ')
         password = input('Insert password of superuser: ')
-        db.session.add(User(email=email, name='admin',
-                            password=generate_password_hash(password, method='sha256'), super_user=True))
+        db.session.add(
+            User(
+                email=email,
+                name='admin',
+                password=generate_password_hash(password, method='pbkdf2:sha256'),
+                super_user=True
+            )
+        )
         db.session.commit()
 
     return app
